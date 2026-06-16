@@ -447,4 +447,25 @@ function removeArrayItem(path, index) {
   );
 }
 
+function updateVehicleStatus(field, value) {
+  setSettings((prev) => {
+    const currentSettings = prev || {};
+    const currentVehicle = currentSettings.vehicle || {};
+    const currentStatus = currentVehicle.current_status || {};
+
+    return {
+      ...currentSettings,
+      vehicle: {
+        ...currentVehicle,
+        current_status: {
+          ...currentStatus,
+          [field]: value,
+          last_status_update: new Date().toISOString(),
+          status_source: "settings_ui",
+        },
+      },
+    };
+  });
+}
+
 export default SettingsPanel;

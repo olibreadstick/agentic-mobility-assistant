@@ -26,6 +26,8 @@ function App() {
     },
   ]);
 
+
+
   const [settings, setSettings] = useState(null);
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsError, setSettingsError] = useState("");
@@ -134,11 +136,13 @@ function stopSpeaking() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: trimmedInput,
-          chatInput: trimmedInput,
-          sessionId,
-          inputType: "voice_or_text",
-        }),
+        message: trimmedInput,
+        chatInput: trimmedInput,
+        sessionId,
+        inputType: "voice_or_text",
+
+        settings,
+      }),
       });
 
       if (!response.ok) {
