@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
-import { getSettings} from "./api/settingsClient";
+import { getSettings, USER_SETTINGS_ID } from "./api/settingsClient";
 import SettingsPanel from "./components/SettingsPanel";
 
 const WEBHOOK_URL =
@@ -34,25 +34,25 @@ function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
-    async function loadSettings() {
-      try {
-        setSettingsLoading(true);
-        setSettingsError("");
+  async function loadSettings() {
+    try {
+      setSettingsLoading(true);
+      setSettingsError("");
 
-        const data = await getSettings(sessionId);
+      const data = await getSettings(USER_SETTINGS_ID);
 
-        setSettings(data.settings);
-        console.log("Loaded settings:", data.settings);
-      } catch (error) {
-        console.error(error);
-        setSettingsError("Could not load settings.");
-      } finally {
-        setSettingsLoading(false);
-      }
+      setSettings(data.settings);
+      console.log("Loaded user settings:", data.settings);
+    } catch (error) {
+      console.error(error);
+      setSettingsError("Could not load user settings.");
+    } finally {
+      setSettingsLoading(false);
     }
+  }
 
-    loadSettings();
-  }, [sessionId]);
+  loadSettings();
+}, []);
 
 
   useEffect(() => {
@@ -139,8 +139,8 @@ function stopSpeaking() {
         message: trimmedInput,
         chatInput: trimmedInput,
         sessionId,
+        user_id: USER_SETTINGS_ID,
         inputType: "voice_or_text",
-
         settings,
       }),
       });
@@ -293,7 +293,7 @@ function stopSpeaking() {
               <SettingsPanel
                 settings={settings}
                 setSettings={setSettings}
-                sessionId={sessionId}
+                userId={USER_SETTINGS_ID}
                 onClose={() => setSettingsOpen(false)}
               />
             )}

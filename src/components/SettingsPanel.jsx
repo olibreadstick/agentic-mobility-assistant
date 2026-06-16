@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { saveSettings } from "../api/settingsClient";
 
-function SettingsPanel({ settings, setSettings, sessionId, onClose }) {
+function SettingsPanel({ settings, setSettings, userId, onClose }) {
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
 
@@ -75,7 +75,7 @@ function removeArrayItem(path, index) {
       setSaving(true);
       setSaveMessage("");
 
-      await saveSettings(sessionId, settings);
+      await saveSettings(settings, userId);
 
       setSaveMessage("Settings saved.");
     } catch (error) {
