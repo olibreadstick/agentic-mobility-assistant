@@ -32,6 +32,16 @@ function App() {
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [settingsError, setSettingsError] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [activePersonId, setActivePersonId] = useState(
+    localStorage.getItem("activePersonId") || ""
+  );
+
+
+  const handleActivePersonSelect = (selectedPerson) => {
+    setActivePersonId(selectedPerson);
+    localStorage.setItem("activePersonId", selectedPerson);
+  };
+
 
   useEffect(() => {
   async function loadSettings() {
@@ -125,6 +135,17 @@ function stopSpeaking() {
 
     if (!trimmedInput || loading) return;
 
+    if (!activePersonId) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          text: "Please select whether you are Parent1 or Parent2 before asking for your route.",
+        },
+      ]);
+      return;
+    }
+
     setMessages((prev) => [...prev, { role: "user", text: trimmedInput }]);
     setInput("");
     setLoading(true);
@@ -140,6 +161,7 @@ function stopSpeaking() {
         chatInput: trimmedInput,
         sessionId,
         user_id: USER_SETTINGS_ID,
+        activePersonId,
         inputType: "voice_or_text",
         settings,
       }),
@@ -277,6 +299,26 @@ function stopSpeaking() {
         <div className="page">
           <div className="chat-container">
             <h1>Agentic Vehicle Assistant</h1>
+
+            <div className="user-selector">
+              <span className="user-selector-label">User:</span>
+
+              <button
+                type="button"
+                className={`user-button ${activePersonId === "Parent1" ? "active" : ""}`}
+                onClick={() => handleActivePersonSelect("Parent1")}
+              >
+                Parent1
+              </button>
+
+              <button
+                type="button"
+                className={`user-button ${activePersonId === "Parent2" ? "active" : ""}`}
+                onClick={() => handleActivePersonSelect("Parent2")}
+              >
+                Parent2
+              </button>
+            </div>
 
             <button
               type="button"
