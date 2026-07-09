@@ -4,7 +4,7 @@ import { getSettings, USER_SETTINGS_ID } from "./api/settingsClient";
 import SettingsPanel from "./components/SettingsPanel";
 
 const WEBHOOK_URL =
-  "https://jbyutse.app.n8n.cloud/webhook/dfdb3619-6ae8-4a9d-8975-b8197ce5aede";
+  "https://jbyutse.app.n8n.cloud/webhook/66e38986-bf56-4753-b3fc-0cb37235f6fb";
 
 const WELCOME_MESSAGE =
   "Hi! Ask me about your route plan, schedule, priorities, construction impacts, or travel plans for today.";
