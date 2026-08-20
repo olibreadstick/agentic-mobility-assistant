@@ -2,167 +2,481 @@
 
 A context-aware agentic AI system for coordinating daily household mobility using a shared autonomous electric vehicle.
 
-[Open the Agentic Mobility Assistant](https://agentic-vehicle-assistant.vercel.app/)
 
-The Agentic Mobility Assistant combines calendar information, household responsibilities, vehicle status, traffic conditions, construction information, and routing services to generate feasible daily travel plans. The system is designed to support households with multiple caregivers and dependents while accounting for scheduling conflicts and transportation priorities.
+**[Open the Agentic Mobility Assistant](https://agentic-vehicle-assistant.vercel.app/)**
+
+![Agentic Mobility Assistant Interface](docs/images/application-interface.png)
 
 ## Overview
 
-Daily travel planning can become complex when several household members share one vehicle. Work meetings, school pickups, medical appointments, traffic, construction, and vehicle charging requirements may all need to be considered simultaneously.
+The **Agentic Mobility Assistant** is a context-aware daily mobility planning system designed to coordinate the transportation needs of a household sharing a single electric vehicle.
 
-The Agentic Mobility Assistant uses an agentic workflow to interpret user requests, analyze calendar events, identify conflicts, assign transportation responsibilities, and generate a personalized route plan.
+Rather than planning individual trips independently, the system constructs a **continuous household mobility mission** that coordinates multiple caregivers, dependents, calendar commitments, vehicle operations, and changing environmental conditions.
 
-The project consists of:
+The system combines **bounded large language model (LLM) agents** with **deterministic mobility-processing components**. LLMs are used for tasks requiring interpretation and contextual reasoning, while externally verifiable operations such as routing, geocoding, traffic analysis, calendar processing, and state management remain deterministic.
 
-* A React-based user interface
-* An n8n agentic workflow
-* Calendar integration
-* AI-based intent classification and planning
+The system considers:
+
+* Multiple household calendars
+* Caregiver and dependent transportation responsibilities
+* Protected events such as school pickups
+* Shared-vehicle availability
+* Passenger continuity
+* Electric-vehicle battery state and charging
 * Traffic-aware route generation
-* Construction-aware routing
-* Shared-vehicle coordination
-* Electric vehicle charging decisions
-* Multi-user household support
+* Road construction
+* Weather conditions
+* Personalized route information
+* Persistent route memory
+* User-facing and vehicle-facing outputs
+
+---
+
+## System Framework
+
+The prototype was implemented using **n8n** and connected to a **React-based conversational interface** through webhooks.
+
+The architecture combines four main elements:
+
+1. **Contextual Data Sources**
+2. **Bounded LLM Agents**
+3. **Deterministic Mobility Processing**
+4. **Persistent Route Memory and Service Delivery**
+
+![Agentic Mobility System Framework](docs/images/system-framework.png)
+
+### Contextual Inputs
+
+The workflow considers three categories of context.
+
+**Household Context**
+
+* Calendar events
+* Household-member roles
+* Caregiver responsibilities
+* Saved locations
+* Arrival buffers
+* Active user
+* Display preferences
+
+**Vehicle Context**
+
+* Vehicle location
+* Battery state
+* Estimated range
+* Charging configuration
+* Vehicle permissions
+* Return-home settings
+
+**Environmental Context**
+
+* Traffic conditions
+* Road construction
+* Weather
+* Wind
+* Visibility
+
+Together, these inputs provide the information needed to construct and verify the daily household mobility mission.
+
+---
+
+## Agentic Workflow
+
+Incoming requests are routed through an intent-guided workflow.
+
+![Agentic Mobility Service Workflow](docs/images/service-workflow.png)
+
+The Intent Classification Agent assigns requests to one of five service intents:
+
+* Route planning
+* Route follow-up
+* Calendar-event addition
+* Calendar-event removal
+* Casual interaction
+
+Only requests requiring a new mobility plan activate the complete route-generation workflow.
+
+Follow-up requests can instead retrieve information from persistent route memory without repeating calendar retrieval, geocoding, routing, construction analysis, and vehicle planning.
+
+---
+
+## Agent Roles
+
+### Intent Classification Agent
+
+Determines which workflow branch should process the incoming request.
+
+It distinguishes between:
+
+* New route-generation requests
+* Questions about an existing route
+* Calendar modifications
+* Casual conversation
+
+### Constraint-Aware Household Mission Planning Agent
+
+Performs the primary household-level reasoning.
+
+The agent:
+
+* Interprets household schedules
+* Determines which events require transportation
+* Identifies event priorities
+* Preserves protected dependent responsibilities
+* Detects scheduling conflicts
+* Assigns caregivers
+* Orders transportation activities
+* Maintains pickup and passenger relationships
+* Constructs the household mobility mission
+
+The agent does **not** independently generate geographic coordinates, route geometry, or travel times. These operations are performed by deterministic mobility-processing components.
+
+### Calendar Event Extractor Agents
+
+Dedicated agents convert natural-language requests into structured information for:
+
+* Calendar-event addition
+* Calendar-event removal
+
+Missing or ambiguous information requires clarification before the calendar is modified.
+
+### Final Route Agent
+
+Converts verified route information into personalized user-facing guidance.
+
+It receives already verified information including:
+
+* Route legs
+* Departure and arrival times
+* Traffic conditions
+* Construction impacts
+* Scheduling decisions
+* Weather context
+* Vehicle information
+
+The Final Route Agent communicates the selected mission without independently recalculating the route or altering the event sequence.
+
+---
+
+## Three-Phase Methodology
+
+The complete planning process is organized into three functional phases.
+
+![Three-Phase Agentic Mobility Methodology](docs/images/methodology-progression.png)
+
+### Phase 1 — Request Interpretation and Household Mission Planning
+
+Phase 1 determines **what the household mission must accomplish**.
+
+The system:
+
+* Receives the user request
+* Classifies the request intent
+* Retrieves and normalizes household calendar events
+* Combines household, vehicle, and schedule information
+* Identifies transportation requirements
+* Detects scheduling conflicts
+* Assigns caregiver responsibilities
+* Preserves protected events
+* Constructs the ordered household mobility mission
+
+At this stage, the logical structure of the day is determined, but externally verifiable route information has not yet been calculated.
+
+### Phase 2 — Deterministic Mobility Processing and Environmental Adaptation
+
+Phase 2 determines **how the mission can be executed under verified mobility conditions**.
+
+Deterministic components perform:
+
+* Location validation
+* Geocoding
+* Traffic-aware route generation
+* Distance calculation
+* Travel-time calculation
+* Departure-time calculation
+* Electric-vehicle battery evaluation
+* Charging coordination
+* Charging-station selection
+* Construction verification
+* Construction-aware rerouting
+* Weather retrieval
+* Operational verification
+
+This separates contextual LLM reasoning from mobility information that can be calculated or verified using external services.
+
+### Phase 3 — Service Delivery and Persistent Route Interaction
+
+Phase 3 determines **how the mission is delivered, preserved, and reused**.
+
+The verified household mission is transformed into:
+
+* Personalized guidance for the active household user
+* A complete vehicle-facing operational plan
+* A persistent route-memory record
+
+The stored route can then support later questions without rerunning the entire planning workflow.
+
+---
 
 ## Key Features
 
-### Calendar-Aware Planning
+### Multi-Calendar Household Planning
 
-The system retrieves household calendar events and determines which events require transportation.
+The assistant coordinates events belonging to multiple household members rather than planning around one user's calendar in isolation.
 
-Events are classified according to their transportation role and priority, including:
+### Shared-Vehicle Mission Planning
 
-* Dependent pickups
-* Dependent activities
-* Medical appointments
-* Work and research meetings
-* Administrative events
-* Flexible personal activities
+Transportation responsibilities are coordinated through one shared vehicle.
 
-### Household Coordination
+The system therefore maintains vehicle continuity across the full day instead of optimizing each trip independently.
 
-The system supports multiple caregivers and dependents sharing a single vehicle.
+### Protected Event Prioritization
 
-It can:
+High-priority responsibilities such as dependent school pickups are protected.
 
-* Assign caregivers to dependent pickups
-* Identify scheduling conflicts
-* Preserve high-priority transportation responsibilities
-* Track passengers in the vehicle
-* Prevent infeasible overlapping vehicle use
-* Recommend alternative times when conflicts occur
+When a lower-priority event conflicts with a protected responsibility, the system can recommend modifying the lower-priority event instead.
+
+### Caregiver Assignment
+
+The workflow determines which caregiver should perform dependent transportation while considering:
+
+* Caregiver schedules
+* Shared-vehicle availability
+* Event priorities
+* Existing responsibilities
+* Passenger state
+
+### Passenger Continuity
+
+Dependents are tracked after pickup so that subsequent vehicle movements remain consistent with the household passenger state.
 
 ### Traffic-Aware Routing
 
-TomTom routing services are used to calculate:
+TomTom services provide operational route information including:
 
 * Travel distance
-* Estimated travel time
+* Live travel time
+* No-traffic travel time
 * Traffic delay
-* Suggested departure time
-* Estimated arrival time
-* Route geometry and street information
+* Departure time
+* Arrival time
+* Street information
+* Route geometry
 
-### Construction Awareness
+### Construction-Aware Adaptation
 
-Generated routes can be compared with current construction information to determine whether road work affects the planned route.
+Generated routes are compared with Montréal construction records.
 
-When relevant construction is detected, the workflow can evaluate whether an alternative route should be used.
+Construction impacts are verified against the reported construction boundaries and route geometry before a route is changed.
 
-### Shared Electric Vehicle Support
+### Electric-Vehicle Charging Coordination
 
-The assistant considers the status of the household's shared electric vehicle when creating the daily mobility plan.
+The system evaluates:
 
-The workflow can evaluate:
-
-* Current battery level
-* Preferred minimum battery level
+* Current battery percentage
+* Preferred minimum battery threshold
 * Critical battery threshold
-* Available idle periods
-* Possible autonomous charging opportunities
+* Estimated remaining range
+* Available charging opportunities
+* Charging-station feasibility
 
-Charging can be inserted into the vehicle schedule when appropriate without interfering with higher-priority household trips.
+When appropriate, autonomous passenger-free charging can be inserted into the daily vehicle mission without disrupting protected household events.
 
-### Route Follow-Up
+### Persistent Route Memory
 
-The system maintains route context so users can ask follow-up questions such as:
+Verified daily mobility missions are stored using the active user and planning date.
 
-* "What time should I leave?"
-* "What is my plan for today?"
-* "When will the vehicle charge?"
-* "Is there traffic on my route?"
-* "Is there construction?"
-* "What is the current battery level?"
+Users can then ask follow-up questions such as:
 
-The assistant can answer questions about an existing route without unnecessarily rebuilding the entire plan.
+```text
+What time should I leave?
+```
+
+```text
+What is my plan today?
+```
+
+```text
+When will the vehicle charge?
+```
+
+```text
+Is there traffic on my route?
+```
+
+```text
+Is there construction?
+```
+
+These questions can be answered from the previously generated route without rebuilding the complete mobility mission.
 
 ### Calendar Modification
 
-Users can also request calendar changes conversationally.
+The assistant also supports conversational calendar modifications.
 
-Examples include:
-
-* "Add a dentist appointment tomorrow at 4 PM."
-* "Remove my afternoon meeting."
-* "Cancel the school pickup event."
-
-After a calendar change, the system can recalculate the mobility plan.
-
-## System Architecture
-
-The application follows a hybrid agentic architecture in which AI reasoning is combined with deterministic workflow components and external data services.
+For example:
 
 ```text
-User
-  |
-  v
-React Interface
-  |
-  v
-n8n Webhook
-  |
-  v
-User Settings + Session Context
-  |
-  v
-Intent Classification
-  |
-  +---------------------------+
-  |             |             |
-  v             v             v
-Route       Route          Calendar
-Planning    Follow-Up      Modification
-  |
-  v
-Calendar Event Collection
-  |
-  v
-Family Route Planning Agent
-  |
-  v
-Conflict Detection &
-Caregiver Assignment
-  |
-  v
-Location Resolution
-  |
-  v
-Vehicle / Charging Planning
-  |
-  v
-TomTom Routing
-  |
-  v
-Traffic & Construction Analysis
-  |
-  v
-Personalized Route Summary
-  |
-  v
-React Interface
+Add a dentist appointment tomorrow at 4 PM.
 ```
 
-The workflow separates language-model reasoning from tasks better handled deterministically, such as API requests, time calculations, route processing, filtering, and structured data transformation.
+or:
+
+```text
+Remove my afternoon meeting.
+```
+
+After the calendar is modified, the household mobility mission can be recalculated using the updated schedule.
+
+---
+
+## Montréal Case Study
+
+The system was evaluated using a controlled Montréal household scenario consisting of:
+
+* Two caregivers
+* Two dependents
+* One shared electric vehicle
+* Work and research commitments
+* Two protected school pickups
+* A conflicting medical appointment
+* A midday EV charging requirement
+
+The scenario requires several scheduling, caregiver, passenger, and vehicle constraints to be coordinated during the same day.
+
+![Household Mobility Mission Timeline](docs/images/household-timeline.png)
+
+The medical appointment conflicts with the protected dependent pickups, requiring the system to determine which activities should remain fixed and which may be rescheduled.
+
+The vehicle also begins below its preferred battery threshold, creating an additional charging requirement that must be coordinated with the household schedule.
+
+---
+
+## Generated Household Mobility Mission
+
+The proposed system transforms the household schedule into one continuous shared-vehicle mission.
+
+![Montréal Household Mobility Route](docs/images/household-route.png)
+
+The generated mission contains **eight vehicle legs**, covers approximately **17.9 km**, and requires an estimated **1 hour and 19 minutes of total driving time**.
+
+The mobility mission coordinates travel between:
+
+* Home
+* Parent1's research meeting
+* Parent2's work meeting
+* The charging station
+* Parent2 pickup
+* Parent1 pickup
+* Child1's school
+* Child2's school
+* Home
+
+The resulting plan successfully:
+
+* Preserved both protected dependent pickups
+* Maintained Parent1's pickup responsibility
+* Coordinated both caregivers through one shared vehicle
+* Maintained passenger continuity
+* Inserted autonomous charging during the available midday period
+* Detected the conflicting medical appointment
+* Recommended rescheduling the medical appointment rather than disrupting the protected pickups
+
+---
+
+## Construction-Aware Rerouting
+
+The case study also demonstrates environmental adaptation when construction affects a generated route.
+
+![Construction-Aware Rerouting](docs/images/construction-rerouting.png)
+
+The original route between Parent2's work meeting and Parent1's research meeting overlapped a reported construction-affected segment of **Rue Mansfield**.
+
+The system:
+
+1. Detects the potential construction overlap
+2. Verifies the affected segment against the route geometry
+3. Generates an alternative route
+4. Evaluates whether the alternative remains within the configured detour limits
+5. Retains the adjusted route when it remains operationally acceptable
+
+In the case study, the verified alternative redirected the vehicle through **McGill College Avenue**.
+
+---
+
+## Evaluation
+
+The system was evaluated from two perspectives:
+
+1. **Architectural capability**
+2. **LLM performance within the same workflow**
+
+### Architectural Ablation
+
+The proposed system was compared with two reduced generalist-agent configurations while using GPT-5.2 in all three conditions.
+
+| Architecture                                      | Successful Runs | Mean Route Accuracy |
+| ------------------------------------------------- | --------------: | ------------------: |
+| **Proposed Agentic Architecture**                 |             3/3 |          **94.44%** |
+| Intent-Guided LLM-Only Planning Baseline          |             3/3 |              75.00% |
+| Calendar-Tool Agent Without Intent Classification |             3/3 |              72.22% |
+
+The largest performance differences occurred in:
+
+* Alternative recommendation quality
+* Active-user filtering
+* Schedule feasibility
+
+The reduced configurations were faster because they performed substantially fewer operations.
+
+However, they did not reproduce the complete capabilities of the proposed architecture, including:
+
+* Traffic-aware routing
+* Construction verification
+* Charging coordination
+* Deterministic mission processing
+* Active-user filtering
+* Persistent route memory
+
+---
+
+## LLM Evaluation
+
+Multiple GPT and Gemini models were evaluated while keeping the surrounding workflow, household scenario, deterministic mobility-processing stages, external services, and evaluation procedure fixed.
+
+The evaluated models included:
+
+* GPT-5.6 Sol
+* GPT-5.5
+* GPT-5.4 mini
+* GPT-5.2
+* GPT-5 mini
+* GPT-4.1 mini
+* Gemini 3.1 Pro Preview
+* Gemini 3.6 Flash
+
+For initial route generation:
+
+* **GPT-5.2** achieved **94.44% mean route accuracy** with a mean response time of approximately **119 seconds**
+* **Gemini 3.1 Pro Preview** also achieved **94.44% mean route accuracy**, but required approximately **232 seconds**
+* **Gemini 3.6 Flash** achieved **88.89% mean route accuracy** and the highest overall composite score of **0.896**
+
+These results show that model selection depends on more than route accuracy alone.
+
+### Route-Memory Follow-Up
+
+Model performance also differed during shorter route-memory interactions.
+
+**GPT-5.5** and **GPT-5.6 Sol** achieved:
+
+* **100% factual accuracy**
+* **100% route-memory accuracy**
+
+across the evaluated follow-up questions.
+
+This indicates that the most suitable model may depend on the specific reasoning task being performed within the overall system.
+
+---
 
 ## Technologies
 
@@ -171,21 +485,38 @@ The workflow separates language-model reasoning from tasks better handled determ
 * React
 * Vite
 * JavaScript
-* HTML/CSS
+* HTML
+* CSS
 
-### Workflow and AI
+### Agentic Workflow
 
 * n8n
-* OpenAI language models
+* Large Language Models
 * Agentic AI
-* Prompt engineering
-* JSON-based agent communication
+* Prompt Engineering
+* Structured JSON communication
+* Persistent workflow state
 
-### External Services
+### AI Models Evaluated
+
+* GPT-5.6 Sol
+* GPT-5.5
+* GPT-5.4 mini
+* GPT-5.2
+* GPT-5 mini
+* GPT-4.1 mini
+* Gemini 3.1 Pro Preview
+* Gemini 3.6 Flash
+
+### Mobility and Context Services
 
 * Google Calendar
-* TomTom Routing and Geocoding
-* OpenWeatherMap
+* TomTom Routing
+* TomTom Geocoding
+* TomTom Traffic
+* Montréal Open Data
+* Circuit électrique charging data
+* Weather services
 
 ### Development
 
@@ -193,6 +524,8 @@ The workflow separates language-model reasoning from tasks better handled determ
 * GitHub
 * REST APIs
 * JSON
+
+---
 
 ## Repository Structure
 
@@ -207,31 +540,44 @@ agentic-mobility-assistant/
 │
 ├── public/
 │
-├── agentic-mobility-assistant-workflow-public.json
+├── docs/
+│   └── images/
+│       ├── application-interface.png
+│       ├── system-framework.png
+│       ├── service-workflow.png
+│       ├── methodology-progression.png
+│       ├── household-timeline.png
+│       ├── household-route.png
+│       └── construction-rerouting.png
 │
+├── agentic-mobility-assistant-workflow-public.json
 ├── package.json
 ├── vite.config.js
 └── README.md
 ```
 
+---
+
 ## n8n Workflow
 
-A sanitized version of the Agentic Mobility Assistant n8n workflow is included in:
+A sanitized version of the main Agentic Mobility Assistant workflow is included in:
 
 ```text
 agentic-mobility-assistant-workflow-public.json
 ```
 
-The public workflow preserves the architecture and processing logic while removing private credentials and environment-specific information.
+The public workflow preserves the workflow architecture and processing logic while removing private credentials and deployment-specific information.
 
-The workflow contains placeholders for services such as:
+Users importing the workflow must configure their own:
 
-* TomTom API credentials
-* Google Calendar credentials
 * OpenAI credentials
-* n8n data table identifiers
+* Google Calendar credentials
+* TomTom API credentials
+* Weather-service credentials
+* n8n data tables
+* Household settings
 
-These must be configured within the user's own n8n environment before running the workflow.
+---
 
 ## Running the Frontend
 
@@ -247,39 +593,74 @@ Start the development server:
 npm run dev
 ```
 
-The React application communicates with the n8n workflow through a webhook endpoint. A valid n8n deployment and the required API integrations must be configured for the complete system to function.
+The React application communicates with the n8n workflow through a webhook endpoint.
+
+A configured n8n environment and the required external services are necessary for the complete application to function.
+
+---
+
+## Research
+
+This repository supports the research project:
+
+### Design and Development of an Agentic System for Context-Aware Daily Mobility Services
+
+The research investigates how bounded LLM reasoning, deterministic transportation processing, environmental information, and persistent operational state can be combined to support continuous household mobility planning.
+
+The work evaluates:
+
+* Household shared-vehicle coordination
+* Multi-calendar planning
+* Agentic workflow architecture
+* Deterministic mobility processing
+* Traffic-aware routing
+* Construction-aware adaptation
+* EV charging coordination
+* Persistent route memory
+* LLM accuracy and latency
+* Architectural capability ablation
+
+---
+
+## Limitations and Future Work
+
+The current prototype was evaluated using one fixed Montréal household configuration involving two caregivers, two dependents, and one shared electric vehicle.
+
+The vehicle-facing operational plan is currently a simulated workflow output rather than a direct interface with a deployed autonomous vehicle.
+
+Future development could include:
+
+* Additional household configurations
+* Multiple shared vehicles
+* Larger numbers of evaluation scenarios
+* Additional repeated LLM trials
+* Component-level architectural ablations
+* More explicit passenger boarding and occupancy state
+* Live vehicle telemetry
+* Dynamic replanning when traffic conditions change
+* Automatic response to newly reported construction
+* Replanning after unexpected calendar delays
+* Real-time battery and charging updates
+
+---
 
 ## Privacy and Security
 
-The public repository does not intentionally include API keys or authentication credentials.
+The public repository should not contain:
 
-The included n8n workflow has been sanitized for public use. Users importing the workflow must connect their own credentials and configure their own calendars, API services, and n8n resources.
+* API keys
+* Authentication tokens
+* Real household calendar information
+* Private addresses
+* Private n8n credentials
+* Unsanitized workflow exports
 
-Real household calendar information should not be committed to a public repository.
+The included public n8n workflow has been sanitized and requires users to connect their own credentials and external services.
 
-## Project Context
-
-This project was developed as part of a software engineering internship and research project investigating how agentic AI can support context-aware daily mobility planning.
-
-The work explores how language-model-based agents can be combined with deterministic software components and real-world transportation data to coordinate complex household travel requirements.
-
-The project also supported research on the development and evaluation of a hybrid agentic mobility assistant for context-aware daily travel planning.
-
-## Future Development
-
-Potential extensions include:
-
-* Improved real-time traffic adaptation
-* Additional transportation modes
-* More advanced EV energy modeling
-* Automated charging-station selection
-* Expanded multi-vehicle household support
-* Additional personalization
-* Improved route-plan visualization
-* Larger-scale evaluation across different household scenarios
+---
 
 ## Author
 
 **Olivia Cardillo**
 
-Software Engineering
+McGill University
