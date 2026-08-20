@@ -2,6 +2,8 @@
 
 A context-aware agentic AI system for coordinating daily household mobility using a shared autonomous electric vehicle.
 
+[Open the Agentic Mobility Assistant](https://agentic-vehicle-assistant.vercel.app/)
+
 The Agentic Mobility Assistant combines calendar information, household responsibilities, vehicle status, traffic conditions, construction information, and routing services to generate feasible daily travel plans. The system is designed to support households with multiple caregivers and dependents while accounting for scheduling conflicts and transportation priorities.
 
 ## Overview
