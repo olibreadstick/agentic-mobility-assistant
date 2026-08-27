@@ -9,6 +9,266 @@ const WEBHOOK_URL =
 const WELCOME_MESSAGE =
   "Hi! Ask me about your route plan, schedule, priorities, construction impacts, or travel plans for today.";
 
+const DEMO_CHARGING_LOCATION =
+  "900 Boulevard René-Lévesque Ouest, Montréal, QC, Canada";
+
+function timeToMinutes(value) {
+  if (!value) return null;
+
+  const normalized = value
+    .toLowerCase()
+    .replace(/\./g, "")
+    .trim();
+
+  const match = normalized.match(
+    /(\d{1,2}):(\d{2})\s*(am|pm)/
+  );
+
+  if (!match) return null;
+
+  let hour = Number(match[1]);
+  const minute = Number(match[2]);
+  const period = match[3];
+
+  if (period === "pm" && hour !== 12) hour += 12;
+  if (period === "am" && hour === 12) hour = 0;
+
+  return hour * 60 + minute;
+}
+
+function getDisplayDuration(leg) {
+  const departure = timeToMinutes(leg.departure_time);
+  const arrival = timeToMinutes(leg.arrival_time);
+
+  if (departure !== null && arrival !== null) {
+    let difference = arrival - departure;
+
+    if (difference < 0) {
+      difference += 24 * 60;
+    }
+
+    return difference;
+  }
+
+  return leg.duration_minutes;
+}
+
+function getShortWeather(weather) {
+  if (!weather) return "";
+
+  const condition = weather.split(",")[0];
+
+  const temperature =
+    weather.match(/(-?\d+(?:\.\d+)?)°C/)?.[1];
+
+  const humidity =
+    weather.match(/(\d+)% humidity/)?.[1];
+
+  return [
+    condition,
+    temperature ? `${temperature}°C` : null,
+    humidity ? `${humidity}% humidity` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+function RouteSummary({ routeData }) {
+  const trips = routeData.route_legs || [];
+  const conflicts = routeData.conflicts || [];
+  const vehicle = routeData.vehicle || {};
+
+  const chargingLocation =
+    vehicle.charging_location || DEMO_CHARGING_LOCATION;
+
+  return (
+    <div className="route-dashboard">
+
+      {/* TOP SUMMARY */}
+      <div className="route-overview-card">
+        <div>
+          <div className="route-date">
+            {routeData.route_date_label}
+          </div>
+
+          <div className="route-weather">
+            {getShortWeather(routeData.weather_summary)}
+          </div>
+        </div>
+
+        <div className="route-stats">
+          <div className="route-stat">
+            <strong>{trips.length}</strong>
+            <span>Trips</span>
+          </div>
+
+          {vehicle.battery_percent !== null && (
+            <div className="route-stat">
+              <strong>{vehicle.battery_percent}%</strong>
+              <span>Battery</span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* CONFLICT */}
+      {conflicts.map((conflict, index) => (
+        <div className="conflict-card" key={index}>
+          <div className="card-label">
+            Schedule conflict
+          </div>
+
+          <div className="conflict-title">
+            {conflict.event_title}
+          </div>
+
+          <div className="conflict-recommendation">
+            Recommended: {conflict.recommended_start} –{" "}
+            {conflict.recommended_end}
+          </div>
+
+          <div className="conflict-reason">
+            {conflict.reason}
+          </div>
+
+          <div className="status-row">
+            {conflict.feasibility_verified && (
+              <span className="status-chip success">
+                Route feasible
+              </span>
+            )}
+
+            {conflict.requires_provider_confirmation && (
+              <span className="status-chip warning">
+                Provider confirmation required
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+
+      {/* ROUTE */}
+      <div className="section-heading">
+        Today's route
+      </div>
+
+      <div className="route-timeline">
+        {trips.map((leg) => {
+          const duration = getDisplayDuration(leg);
+
+          return (
+            <div
+              className="timeline-trip"
+              key={leg.trip_number}
+            >
+              <div className="timeline-column">
+                <div className="timeline-time">
+                  {leg.departure_time}
+                </div>
+
+                <div className="timeline-dot" />
+
+                <div className="timeline-line" />
+              </div>
+
+              <div className="trip-card">
+                <div className="trip-header">
+                  <span>Trip {leg.trip_number}</span>
+
+                  {duration !== null && (
+                    <span>{duration} min</span>
+                  )}
+                </div>
+
+                <div className="trip-location">
+                  <div className="location-start">
+                    {leg.start_address}
+                  </div>
+
+                  <div className="route-arrow">↓</div>
+
+                  <div className="location-end">
+                    {leg.end_address}
+                  </div>
+                </div>
+
+                {leg.purpose && (
+                  <div className="trip-purpose">
+                    {leg.purpose}
+                  </div>
+                )}
+
+                {leg.responsibility && (
+                  <div className="responsibility-note">
+                    {leg.responsibility}
+                  </div>
+                )}
+
+                {leg.shared_ride && (
+                  <div className="shared-ride-note">
+                    {leg.shared_ride}
+                  </div>
+                )}
+
+                <div className="arrival-row">
+                  Arrive {leg.arrival_time}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* VEHICLE */}
+      <div className="vehicle-card">
+        <div className="card-label">
+          Vehicle plan
+        </div>
+
+        <div className="vehicle-grid">
+          <div>
+            <span className="vehicle-label">
+              Battery
+            </span>
+
+            <strong>
+              {vehicle.battery_percent ?? "—"}%
+            </strong>
+          </div>
+
+          {vehicle.charging_start &&
+            vehicle.charging_end && (
+              <div>
+                <span className="vehicle-label">
+                  Autonomous charging
+                </span>
+
+                <strong>
+                  {vehicle.charging_start} –{" "}
+                  {vehicle.charging_end}
+                </strong>
+              </div>
+            )}
+        </div>
+
+        {vehicle.charging_start && (
+          <div className="charging-location">
+            {chargingLocation}
+          </div>
+        )}
+      </div>
+
+      {/* SUMMARY */}
+      {routeData.summary && (
+        <div className="day-summary">
+          {routeData.summary}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 function App() {
   const sessionId = useMemo(() => {
     const existing = localStorage.getItem("agenticVehicleSessionId");
@@ -95,17 +355,60 @@ function App() {
   }
 
   return (
+    data.user_interface_output ||
     data.reply ||
     data.user_message ||
     data.output ||
     data.text ||
     data.response ||
     data.message ||
+    data?.json?.user_interface_output ||
     data?.json?.reply ||
     data?.json?.user_message ||
     data?.output?.[0]?.content?.[0]?.text ||
     "Sorry, I did not receive a valid response."
   );
+}
+
+function extractStructuredRoute(data) {
+  const candidates = [
+    data?.user_interface_output,
+    data?.output,
+    data?.json?.user_interface_output,
+    data?.json?.output,
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+
+    if (
+      typeof candidate === "object" &&
+      Array.isArray(candidate.route_legs)
+    ) {
+      return candidate;
+    }
+
+    if (typeof candidate === "string") {
+      try {
+        const parsed = JSON.parse(candidate);
+
+        if (
+          parsed?.user_interface_output &&
+          Array.isArray(parsed.user_interface_output.route_legs)
+        ) {
+          return parsed.user_interface_output;
+        }
+
+        if (Array.isArray(parsed?.route_legs)) {
+          return parsed;
+        }
+      } catch {
+        // Not structured route JSON, so continue normally.
+      }
+    }
+  }
+
+  return null;
 }
 
 function speakText(text) {
@@ -175,6 +478,7 @@ function stopSpeaking() {
       const data = Array.isArray(rawData) ? rawData[0] : rawData;
 
       const assistantReply = extractAssistantReply(data);
+      const routeData = extractStructuredRoute(data);
 
       const missingEvents =
       data.missing_location_events ||
@@ -185,14 +489,18 @@ function stopSpeaking() {
       ...prev,
       {
         role: "assistant",
-        text: assistantReply,
+        text: routeData ? "" : assistantReply,
+        routeData,
         missing_location_events: missingEvents,
       },
     ]);
 
+    const baseSpeechText =
+      routeData?.summary || assistantReply;
+
     const speechText =
       missingEvents.length > 0
-        ? assistantReply +
+        ? baseSpeechText +
           " " +
           missingEvents
             .map(
@@ -200,7 +508,7 @@ function stopSpeaking() {
                 `${event.title}, for ${event.person}, at ${event.start_time_display}.`
             )
             .join(" ")
-        : assistantReply;
+        : baseSpeechText;
 
     speakText(speechText);
     } catch (error) {
@@ -298,7 +606,7 @@ function stopSpeaking() {
       return (
         <div className="page">
           <div className="chat-container">
-            <h1>Agentic Vehicle Assistant</h1>
+            <h1>Agentic Mobility Assistant</h1>
 
             <div className="user-selector">
               <span className="user-selector-label">User:</span>
@@ -345,7 +653,11 @@ function stopSpeaking() {
             <div className="chat-box">
               {messages.map((msg, index) => (
                 <div key={index} className={`message ${msg.role}`}>
-                  <div>{msg.text}</div>
+                  {msg.routeData ? (
+                    <RouteSummary routeData={msg.routeData} />
+                  ) : (
+                    <div>{msg.text}</div>
+                  )}
 
     {msg.missing_location_events?.length > 0 && (
       <div className="missing-events">
