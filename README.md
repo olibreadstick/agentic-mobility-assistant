@@ -3,9 +3,28 @@
 A context-aware agentic AI system for coordinating daily household mobility using a shared autonomous electric vehicle.
 
 
-**[Open the Agentic Mobility Assistant](https://agentic-vehicle-assistant.vercel.app/)**
+**[Open the Agentic Mobility Assistant](https://agentic-mobility-assistant.vercel.app/)**
 
 ![Agentic Mobility Assistant Interface](docs/images/application-interface.png)
+
+## AAAI-27 Demonstration
+
+This repository accompanies the AAAI-27 Demonstration submission:
+
+### Design and Development of an Agentic System for Context-Aware Daily Mobility Services
+
+**Olivia Cardillo and Jiangbo Yu — McGill University**
+
+- [AAAI-27 Demonstration Paper](docs/aaai27/AAAI27_Demonstration_Paper.pdf)
+- [AAAI-27 Demonstration Video](docs/aaai27/AAAI27_Demonstration_Video.mp4)
+
+The demonstration presents two representative household mobility scenarios:
+
+1. **Feasible shared-vehicle day** — The vehicle begins at 80% battery and coordinates sequential caregiver drop-offs, a caregiver pickup, two protected school pickups, and the return home without unnecessary charging or schedule intervention.
+
+2. **Constrained Montréal case study** — The vehicle begins at 35% battery and the workflow coordinates autonomous charging, preserves protected dependent pickups, recommends rescheduling a conflicting medical appointment, and verifies construction-aware rerouting.
+
+---
 
 ## Overview
 
@@ -541,6 +560,9 @@ agentic-mobility-assistant/
 ├── public/
 │
 ├── docs/
+│   ├── aaai27/
+│   │   ├── AAAI27_Demonstration_Paper.pdf
+│   │   └── AAAI27_Demonstration_Video_Compressed.mp4
 │   └── images/
 │       ├── application-interface.png
 │       ├── system-framework.png
