@@ -642,25 +642,4 @@ Future development could include:
 * Replanning after unexpected calendar delays
 * Real-time battery and charging updates
 
----
 
-## Privacy and Security
-
-The public repository should not contain:
-
-* API keys
-* Authentication tokens
-* Real household calendar information
-* Private addresses
-* Private n8n credentials
-* Unsanitized workflow exports
-
-The included public n8n workflow has been sanitized and requires users to connect their own credentials and external services.
-
----
-
-## Author
-
-**Olivia Cardillo**
-
-McGill University
