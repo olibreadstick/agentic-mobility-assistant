@@ -1,0 +1,270 @@
+{
+ "instance": {
+  "id": "montreal_run2",
+  "home": "home",
+  "day_start": 630.0,
+  "active_user": "Parent1",
+  "person_start": {
+   "Child1": "school1",
+   "Child2": "school2"
+  },
+  "locations": {
+   "home": {
+    "name": "1380 Sherbrooke St W (home)",
+    "lat": 45.4986,
+    "lng": -73.5794,
+    "kind": "home"
+   },
+   "p1_work": {
+    "name": "Macdonald Engineering Building, 817 Sherbrooke St W",
+    "lat": 45.5049,
+    "lng": -73.5761,
+    "kind": "work"
+   },
+   "p2_work": {
+    "name": "1 Place Ville Marie",
+    "lat": 45.5016,
+    "lng": -73.569,
+    "kind": "work"
+   },
+   "charger": {
+    "name": "900 Rene-Levesque Blvd W (charging)",
+    "lat": 45.4994,
+    "lng": -73.5683,
+    "kind": "charger"
+   },
+   "school1": {
+    "name": "4350 Sainte-Catherine St W (Child1 school)",
+    "lat": 45.491,
+    "lng": -73.584,
+    "kind": "school"
+   },
+   "school2": {
+    "name": "11 Chemin de la Cote-Saint-Antoine (Child2 school)",
+    "lat": 45.4905,
+    "lng": -73.5898,
+    "kind": "school"
+   },
+   "dentist": {
+    "name": "1194 Rue Mackay (dentist)",
+    "lat": 45.4975,
+    "lng": -73.5755,
+    "kind": "poi"
+   }
+  },
+  "persons": [
+   {
+    "id": "Parent1",
+    "role": "caregiver",
+    "can_drive": true
+   },
+   {
+    "id": "Parent2",
+    "role": "caregiver",
+    "can_drive": true
+   },
+   {
+    "id": "Child1",
+    "role": "dependent",
+    "can_drive": false
+   },
+   {
+    "id": "Child2",
+    "role": "dependent",
+    "can_drive": false
+   }
+  ],
+  "activities": [
+   {
+    "id": "p1_research",
+    "person": "Parent1",
+    "title": "Research meeting",
+    "category": "work",
+    "loc": "p1_work",
+    "start": 660.0,
+    "end": 900.0,
+    "buffer": 5,
+    "grace": 5.0,
+    "slots": [],
+    "escorts": [],
+    "semantics": {
+     "priority": 3,
+     "protected": false,
+     "reschedulable": false,
+     "needs_vehicle": true
+    }
+   },
+   {
+    "id": "p1_dentist",
+    "person": "Parent1",
+    "title": "Dentist appointment",
+    "category": "caregiver_medical",
+    "loc": "dentist",
+    "start": 960.0,
+    "end": 1005.0,
+    "buffer": 15,
+    "grace": 5.0,
+    "slots": [
+     990.0,
+     1005.0,
+     1020.0,
+     1035.0,
+     1050.0,
+     1065.0,
+     1080.0,
+     1095.0,
+     1110.0
+    ],
+    "escorts": [],
+    "semantics": {
+     "priority": 2,
+     "protected": false,
+     "reschedulable": true,
+     "needs_vehicle": true
+    }
+   },
+   {
+    "id": "p2_work",
+    "person": "Parent2",
+    "title": "Work meeting",
+    "category": "work",
+    "loc": "p2_work",
+    "start": 720.0,
+    "end": 870.0,
+    "buffer": 5,
+    "grace": 5.0,
+    "slots": [],
+    "escorts": [],
+    "semantics": {
+     "priority": 3,
+     "protected": false,
+     "reschedulable": false,
+     "needs_vehicle": true
+    }
+   },
+   {
+    "id": "c1_school",
+    "person": "Child1",
+    "title": "School (pickup 4:00 PM)",
+    "category": "school",
+    "loc": "school1",
+    "start": 510.0,
+    "end": 960.0,
+    "buffer": 10,
+    "grace": 5.0,
+    "slots": [],
+    "escorts": [
+     "Parent1"
+    ],
+    "semantics": {
+     "priority": 1,
+     "protected": true,
+     "reschedulable": false,
+     "needs_vehicle": true
+    }
+   },
+   {
+    "id": "c2_school",
+    "person": "Child2",
+    "title": "School (pickup 4:45 PM)",
+    "category": "school",
+    "loc": "school2",
+    "start": 510.0,
+    "end": 1005.0,
+    "buffer": 10,
+    "grace": 5.0,
+    "slots": [],
+    "escorts": [
+     "Parent1"
+    ],
+    "semantics": {
+     "priority": 1,
+     "protected": true,
+     "reschedulable": false,
+     "needs_vehicle": true
+    }
+   }
+  ],
+  "chargers": [
+   {
+    "id": "ce_900rl",
+    "loc": "charger",
+    "power_kw": 40.0
+   }
+  ],
+  "vehicle": {
+   "battery_kwh": 64.0,
+   "soc0": 0.35,
+   "soc_crit": 0.2,
+   "soc_pref": 0.65,
+   "kwh_per_km": 0.18,
+   "capacity": 5,
+   "start_loc": "home",
+   "autonomy": "AV",
+   "escort_required": true,
+   "max_charges": 2
+  },
+  "zones": [
+   {
+    "id": "mansfield",
+    "lat": 45.503,
+    "lng": -73.5733,
+    "radius_m": 140.0,
+    "delay": 0.9,
+    "detour": 0.15,
+    "street": "Rue Mansfield"
+   }
+  ],
+  "leg_overrides": [
+   [
+    "home",
+    "p1_work",
+    3.6,
+    12
+   ],
+   [
+    "p1_work",
+    "p2_work",
+    2.0,
+    11
+   ],
+   [
+    "p2_work",
+    "charger",
+    0.6,
+    3
+   ],
+   [
+    "charger",
+    "p2_work",
+    0.8,
+    5
+   ],
+   [
+    "p2_work",
+    "p1_work",
+    1.2,
+    6
+   ],
+   [
+    "p1_work",
+    "school1",
+    4.3,
+    13
+   ],
+   [
+    "school1",
+    "school2",
+    4.8,
+    12
+   ],
+   [
+    "school2",
+    "home",
+    3.4,
+    12
+   ]
+  ]
+ },
+ "time_limit": 30
+}
