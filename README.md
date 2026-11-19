@@ -218,13 +218,11 @@ The evaluation uses a modeled single-vehicle household setting, discretized plan
 If you use this software, planning framework, or benchmark in research, please cite the associated manuscript. The citation included in the original project README is reproduced here:
 
 ```bibtex
-@article{cardillo_yu_isv,
-  title   = {Interpret, solve, Verify: A bounded-agency language-model assistant for coordinating
-             household travel with a shared electric vehicle},
-  author  = {Cardillo, Olivia and Yu, Jiangbo},
-  journal = {Transportation Research Part C: Emerging Technologies},
-  note    = {Submitted},
-  year    = {2026}
+@misc{cardillo_yu_2026,
+  title  = {Interpret, Solve, Verify: A Bounded-Agency Agentic Mobility Service for Household Travel Coordination},
+  author = {Cardillo, Olivia and Yu, Jiangbo},
+  year   = {2026},
+  note   = {Workshop manuscript}
 }
 ```
 

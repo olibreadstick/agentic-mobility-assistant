@@ -11,13 +11,12 @@ authors:
 repository-code: "https://github.com/olibreadstick/agentic-mobility-assistant"
 license: MIT
 preferred-citation:
-  type: article
-  title: "Plan, verify, remember: A bounded-agency language-model assistant for coordinating household travel with a shared electric vehicle"
+  type: unpublished
+  title: "Interpret, Solve, Verify: A Bounded-Agency Agentic Mobility Service for Household Travel Coordination"
   authors:
     - family-names: Cardillo
       given-names: Olivia
     - family-names: Yu
       given-names: Jiangbo
-  journal: "Transportation Research Part C: Emerging Technologies"
   year: 2026
-  notes: "Manuscript submitted"
+  notes: "Workshop manuscript"
