@@ -1,0 +1,6 @@
+# Core package (hmplan) uses only the Python standard library (Python >= 3.10).
+# The following are needed for experiments, figures and tests.
+numpy>=1.26
+pandas>=2.1
+matplotlib>=3.8
+pytest>=7.4

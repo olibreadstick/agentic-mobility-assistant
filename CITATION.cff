@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software or benchmark, please cite the paper below."
+title: "Agentic Mobility Assistant: Interpret-Solve-Verify planning of household travel with a shared electric vehicle"
+authors:
+  - family-names: Cardillo
+    given-names: Olivia
+    affiliation: McGill University
+  - family-names: Yu
+    given-names: Jiangbo
+    affiliation: McGill University
+repository-code: "https://github.com/olibreadstick/agentic-mobility-assistant"
+license: MIT
+preferred-citation:
+  type: article
+  title: "Plan, verify, remember: A bounded-agency language-model assistant for coordinating household travel with a shared electric vehicle"
+  authors:
+    - family-names: Cardillo
+      given-names: Olivia
+    - family-names: Yu
+      given-names: Jiangbo
+  journal: "Transportation Research Part C: Emerging Technologies"
+  year: 2026
+  notes: "Manuscript submitted"

@@ -1,0 +1,308 @@
+=== run1 / exact  Phi=(0, 0, 0, 0, 0.0, 98.9)  legs=6  vkt=15.6  vht=58.3  soc_end=0.76
+ 0 08:15-08:25 home           pick Parent1,Parent2 
+ 1 08:33-08:34 p2_work        drop Parent2 
+ 2 08:40-08:41 p1_work        drop Parent1 
+ 3 08:41-13:15 p1_work        pick Parent1 
+ 4 13:28-15:30 school1        pick Child1 
+ 5 15:42-16:15 school2        pick Child2 
+ 6 16:26-16:27 p2_work        pick Parent2 
+ 7 16:35-16:36 home           drop Parent1,Parent2,Child1,Child2 
+violations: []
+=== run1 / rules  Phi=(0, 0, 0, 0, 0.0, 116.3)  legs=7  vkt=18.6  vht=70.6  soc_end=0.75
+ 0 08:15-08:16 home           pick Parent2 
+ 1 08:24-08:25 p2_work        drop Parent2 
+ 2 08:33-08:34 home           pick Parent1 
+ 3 08:46-08:47 p1_work        drop Parent1 
+ 4 08:47-13:15 p1_work        pick Parent1 
+ 5 13:26-13:30 p2_work        pick Parent2 
+ 6 13:38-15:30 school1        pick Child1 
+ 7 15:42-16:15 school2        pick Child2 
+ 8 16:27-16:28 home           drop Parent1,Parent2,Child1,Child2 
+violations: []
+=== run1 / context  Phi=(0, 0, 0, 0, 0.0, 116.3)  legs=7  vkt=18.6  vht=70.6  soc_end=0.75
+ 0 08:15-08:16 home           pick Parent2 
+ 1 08:24-08:25 p2_work        drop Parent2 
+ 2 08:33-08:34 home           pick Parent1 
+ 3 08:46-08:47 p1_work        drop Parent1 
+ 4 08:47-13:15 p1_work        pick Parent1 
+ 5 13:26-13:30 p2_work        pick Parent2 
+ 6 13:38-15:30 school1        pick Child1 
+ 7 15:42-16:15 school2        pick Child2 
+ 8 16:27-16:28 home           drop Parent1,Parent2,Child1,Child2 
+violations: []
+=== run1 / replay  Phi=(0, 0, 0, 0, 0.0, 116.3)  legs=7  vkt=18.6  vht=70.6  soc_end=0.75
+ 0 08:15-08:16 home           pick Parent2 
+ 1 08:24-08:25 p2_work        drop Parent2 
+ 2 08:33-08:34 home           pick Parent1 
+ 3 08:46-08:47 p1_work        drop Parent1 
+ 4 08:47-13:15 p1_work        pick Parent1 
+ 5 13:26-13:30 p2_work        pick Parent2 
+ 6 13:38-15:30 school1        pick Child1 
+ 7 15:42-16:15 school2        pick Child2 
+ 8 16:27-16:28 home           drop Parent1,Parent2,Child1,Child2 
+violations: []
+=== run2 / exact  Phi=(0, 0, 0, 1, 0.0, 101.8)  legs=10  vkt=15.6  vht=72.6  soc_end=0.72
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:37-10:38 p2_work        drop Parent2 
+ 2 10:45-10:46 p1_work        drop Parent1 
+ 3 10:53-11:33 charger        charge 40 min self-charging
+ 4 11:38-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:06-15:07 home           drop Parent2 
+ 7 15:13-16:00 school1        pick Child1 
+ 8 16:12-16:45 school2        pick Child2 
+ 9 16:54-16:55 dentist        drop Parent1,Child1,Child2 
+10 16:55-18:00 dentist        pick Parent1,Child1,Child2 
+11 18:07-18:08 home           drop Parent1,Child1,Child2 
+reschedule: p1_dentist->17:15
+violations: []
+=== run2 / rules  Phi=(0, 0, 0, 1, 4.4, 153.2)  legs=9  vkt=20.0  vht=80.6  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:57-10:58 p2_work        drop Parent2 
+ 3 11:01-11:31 charger        charge 30 min self-charging
+ 4 11:36-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:12-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        drop Parent1 
+ 9 16:55-18:30 dentist        pick Parent1 
+10 18:37-18:38 home           drop Parent1,Parent2,Child1,Child2 
+reschedule: p1_dentist->17:45
+violations: []
+=== run2 / context  Phi=(0, 0, 4, 0, 4.3, 117.8)  legs=9  vkt=19.6  vht=82.4  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:57-10:58 p2_work        drop Parent2 
+ 3 11:01-11:31 charger        charge 30 min self-charging
+ 4 11:36-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:08-16:09 dentist        drop Parent1 
+ 8 16:09-16:26 dentist        pick Parent1 (early: Parent1) 
+ 9 16:35-16:45 school2        pick Child2 
+10 16:57-16:58 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('MISSED', 'p1_dentist')]
+=== run2 / replay  Phi=(1, 0, 4, 0, 34.7, 127.0)  legs=8  vkt=16.7  vht=91.3  soc_end=0.30
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:55-10:56 p2_work        drop Parent2 
+ 3 10:56-14:30 p2_work        pick Parent2 
+ 4 14:36-15:00 p1_work        pick Parent1 
+ 5 15:13-16:00 school1        pick Child1 
+ 6 16:08-16:09 dentist        drop Parent1 
+ 7 16:19-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        pick Parent1 
+ 9 17:02-17:03 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('UNAUTHORIZED_PICKUP', 'c2_school'), ('LATE', 'p1_dentist')]
+=== run2_any_escort / exact  Phi=(0, 0, 0, 0, 0.0, 99.9)  legs=10  vkt=15.8  vht=72.9  soc_end=0.72
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:37-10:38 p2_work        drop Parent2 
+ 2 10:45-10:46 p1_work        drop Parent1 
+ 3 10:53-11:33 charger        charge 40 min self-charging
+ 4 11:38-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:06-15:07 dentist        drop Parent1 
+ 7 15:14-16:00 school1        pick Child1 
+ 8 16:12-16:45 school2        pick Child2 
+ 9 16:54-16:55 dentist        pick Parent1 
+10 17:02-17:03 home           drop Parent1,Parent2,Child1,Child2 
+violations: []
+=== run2_any_escort / rules  Phi=(0, 0, 0, 1, 4.4, 153.2)  legs=9  vkt=20.0  vht=80.6  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:57-10:58 p2_work        drop Parent2 
+ 3 11:01-11:31 charger        charge 30 min self-charging
+ 4 11:36-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:12-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        drop Parent1 
+ 9 16:55-18:30 dentist        pick Parent1 
+10 18:37-18:38 home           drop Parent1,Parent2,Child1,Child2 
+reschedule: p1_dentist->17:45
+violations: []
+=== run2_any_escort / context  Phi=(0, 0, 4, 0, 4.0, 121.4)  legs=10  vkt=18.5  vht=86.5  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:57-10:58 p2_work        drop Parent2 
+ 3 11:01-11:31 charger        charge 30 min self-charging
+ 4 11:36-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:08-16:09 dentist        drop Parent1 
+ 8 16:19-16:45 school2        pick Child2 
+ 9 16:54-16:55 dentist        pick Parent1 
+10 17:02-17:03 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('LATE', 'p1_dentist')]
+=== run2_any_escort / replay  Phi=(0, 0, 4, 0, 34.7, 127.0)  legs=8  vkt=16.7  vht=91.3  soc_end=0.30
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:55-10:56 p2_work        drop Parent2 
+ 3 10:56-14:30 p2_work        pick Parent2 
+ 4 14:36-15:00 p1_work        pick Parent1 
+ 5 15:13-16:00 school1        pick Child1 
+ 6 16:08-16:09 dentist        drop Parent1 
+ 7 16:19-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        pick Parent1 
+ 9 17:02-17:03 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('LATE', 'p1_dentist')]
+=== run2_no_construction / exact  Phi=(0, 0, 0, 1, 0.0, 99.0)  legs=10  vkt=15.1  vht=69.9  soc_end=0.72
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:37-10:38 p2_work        drop Parent2 
+ 2 10:44-10:45 p1_work        drop Parent1 
+ 3 10:51-11:31 charger        charge 40 min self-charging
+ 4 11:36-14:30 p2_work        pick Parent2 
+ 5 14:36-15:00 p1_work        pick Parent1 
+ 6 15:06-15:07 home           drop Parent2 
+ 7 15:13-16:00 school1        pick Child1 
+ 8 16:12-16:45 school2        pick Child2 
+ 9 16:54-16:55 dentist        drop Parent1,Child1,Child2 
+10 16:55-18:00 dentist        pick Parent1,Child1,Child2 
+11 18:07-18:08 home           drop Parent1,Child1,Child2 
+reschedule: p1_dentist->17:15
+violations: []
+=== run2_no_construction / rules  Phi=(0, 0, 0, 1, 4.3, 150.5)  legs=9  vkt=19.7  vht=78.1  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:55-10:56 p2_work        drop Parent2 
+ 3 10:59-11:29 charger        charge 30 min self-charging
+ 4 11:34-14:30 p2_work        pick Parent2 
+ 5 14:36-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:12-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        drop Parent1 
+ 9 16:55-18:30 dentist        pick Parent1 
+10 18:37-18:38 home           drop Parent1,Parent2,Child1,Child2 
+reschedule: p1_dentist->17:45
+violations: []
+=== run2_no_construction / context  Phi=(0, 0, 4, 0, 4.1, 115.1)  legs=9  vkt=19.2  vht=79.9  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:55-10:56 p2_work        drop Parent2 
+ 3 10:59-11:29 charger        charge 30 min self-charging
+ 4 11:34-14:30 p2_work        pick Parent2 
+ 5 14:36-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:08-16:09 dentist        drop Parent1 
+ 8 16:09-16:26 dentist        pick Parent1 (early: Parent1) 
+ 9 16:35-16:45 school2        pick Child2 
+10 16:57-16:58 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('MISSED', 'p1_dentist')]
+=== run2_no_construction / replay  Phi=(1, 0, 4, 0, 34.7, 110.7)  legs=8  vkt=16.7  vht=76.0  soc_end=0.30
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:55-10:56 p2_work        drop Parent2 
+ 3 10:56-14:30 p2_work        pick Parent2 
+ 4 14:36-15:00 p1_work        pick Parent1 
+ 5 15:13-16:00 school1        pick Child1 
+ 6 16:08-16:09 dentist        drop Parent1 
+ 7 16:19-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        pick Parent1 
+ 9 17:02-17:03 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('UNAUTHORIZED_PICKUP', 'c2_school'), ('LATE', 'p1_dentist')]
+=== run2_HV / exact  Phi=(0, 0, 0, 1, 0.0, 106.3)  legs=9  vkt=16.6  vht=71.5  soc_end=0.72
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:51-11:31 charger        charge 40 min self-charging
+ 3 11:36-11:37 p2_work        drop Parent2 
+ 4 11:37-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:06-15:07 home           drop Parent2 
+ 7 15:13-16:00 school1        pick Child1 
+ 8 16:12-16:45 school2        pick Child2 
+ 9 16:54-16:55 dentist        drop Parent1,Child1,Child2 
+10 16:55-18:00 dentist        pick Parent1,Child1,Child2 
+11 18:07-18:08 home           drop Parent1,Child1,Child2 
+reschedule: p1_dentist->17:15
+violations: []
+=== run2_HV / rules  Phi=(0, 0, 0, 1, 4.0, 147.7)  legs=8  vkt=18.6  vht=72.1  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:51-11:21 charger        charge 30 min self-charging
+ 3 11:26-11:27 p2_work        drop Parent2 
+ 4 11:27-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:12-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        drop Parent1 
+ 9 16:55-18:30 dentist        pick Parent1 
+10 18:37-18:38 home           drop Parent1,Parent2,Child1,Child2 
+reschedule: p1_dentist->17:45
+violations: []
+=== run2_HV / context  Phi=(0, 0, 4, 0, 3.8, 112.2)  legs=8  vkt=18.1  vht=73.9  soc_end=0.61
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:51-11:21 charger        charge 30 min self-charging
+ 3 11:26-11:27 p2_work        drop Parent2 
+ 4 11:27-14:30 p2_work        pick Parent2 
+ 5 14:37-15:00 p1_work        pick Parent1 
+ 6 15:13-16:00 school1        pick Child1 
+ 7 16:08-16:09 dentist        drop Parent1 
+ 8 16:09-16:26 dentist        pick Parent1 (early: Parent1) 
+ 9 16:35-16:45 school2        pick Child2 
+10 16:57-16:58 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('MISSED', 'p1_dentist')]
+=== run2_HV / replay  Phi=(1, 0, 4, 0, 34.7, 127.0)  legs=8  vkt=16.7  vht=91.3  soc_end=0.30
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:55-10:56 p2_work        drop Parent2 
+ 3 10:56-14:30 p2_work        pick Parent2 
+ 4 14:36-15:00 p1_work        pick Parent1 
+ 5 15:13-16:00 school1        pick Child1 
+ 6 16:08-16:09 dentist        drop Parent1 
+ 7 16:19-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        pick Parent1 
+ 9 17:02-17:03 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('UNAUTHORIZED_PICKUP', 'c2_school'), ('LATE', 'p1_dentist')]
+=== run2_soc80 / exact  Phi=(0, 0, 0, 1, 0.0, 95.5)  legs=8  vkt=12.5  vht=67.5  soc_end=0.76
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:37-10:38 p2_work        drop Parent2 
+ 2 10:45-10:46 p1_work        drop Parent1 
+ 3 10:46-15:00 p1_work        pick Parent1 
+ 4 15:13-15:14 p2_work        pick Parent2 
+ 5 15:22-16:00 school1        pick Child1 
+ 6 16:08-16:09 home           drop Parent2,Child1 
+ 7 16:18-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        drop Parent1,Child2 
+ 9 16:55-18:00 dentist        pick Parent1,Child2 
+10 18:07-18:08 home           drop Parent1,Child2 
+reschedule: p1_dentist->17:15
+violations: []
+=== run2_soc80 / rules  Phi=(0, 0, 0, 1, 0.0, 145.2)  legs=7  vkt=18.6  vht=72.6  soc_end=0.75
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:57-10:58 p2_work        drop Parent2 
+ 3 10:58-14:30 p2_work        pick Parent2 
+ 4 14:37-15:00 p1_work        pick Parent1 
+ 5 15:13-16:00 school1        pick Child1 
+ 6 16:12-16:45 school2        pick Child2 
+ 7 16:54-16:55 dentist        drop Parent1 
+ 8 16:55-18:30 dentist        pick Parent1 
+ 9 18:37-18:38 home           drop Parent1,Parent2,Child1,Child2 
+reschedule: p1_dentist->17:45
+violations: []
+=== run2_soc80 / context  Phi=(0, 0, 4, 0, 0.0, 109.8)  legs=7  vkt=18.2  vht=74.4  soc_end=0.75
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:57-10:58 p2_work        drop Parent2 
+ 3 10:58-14:30 p2_work        pick Parent2 
+ 4 14:37-15:00 p1_work        pick Parent1 
+ 5 15:13-16:00 school1        pick Child1 
+ 6 16:08-16:09 dentist        drop Parent1 
+ 7 16:09-16:26 dentist        pick Parent1 (early: Parent1) 
+ 8 16:35-16:45 school2        pick Child2 
+ 9 16:57-16:58 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('MISSED', 'p1_dentist')]
+=== run2_soc80 / replay  Phi=(1, 0, 4, 0, 0.0, 127.0)  legs=8  vkt=16.7  vht=91.3  soc_end=0.75
+ 0 10:30-10:31 home           pick Parent1,Parent2 
+ 1 10:43-10:44 p1_work        drop Parent1 
+ 2 10:55-10:56 p2_work        drop Parent2 
+ 3 10:56-14:30 p2_work        pick Parent2 
+ 4 14:36-15:00 p1_work        pick Parent1 
+ 5 15:13-16:00 school1        pick Child1 
+ 6 16:08-16:09 dentist        drop Parent1 
+ 7 16:19-16:45 school2        pick Child2 
+ 8 16:54-16:55 dentist        pick Parent1 
+ 9 17:02-17:03 home           drop Parent1,Parent2,Child1,Child2 
+violations: [('UNAUTHORIZED_PICKUP', 'c2_school'), ('LATE', 'p1_dentist')]
